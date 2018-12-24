@@ -5,4 +5,14 @@
   <string name="wallpaper_description">A festive snowy village, design by Qi Qu</string>
   <string name="wallpaper_author">Daniele Bonaldo</string>
 
+  <string-array name="preference_background_types_texts">
+    <item>Deep blue</item>
+    <item>Pure black</item>
+  </string-array>
+
+  <string-array name="preference_background_types_values">
+    <item>deep_blue</item>
+    <item>pure_black</item>
+  </string-array>
+
 </resources>

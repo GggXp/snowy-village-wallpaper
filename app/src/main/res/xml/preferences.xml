@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="Appearance">
+
+        <androidx.preference.DropDownPreference
+            android:title="Background color"
+            android:summary="%s"
+            android:entries="@array/preference_background_types_texts"
+            android:entryValues="@array/preference_background_types_values"
+            android:key="pref_background" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

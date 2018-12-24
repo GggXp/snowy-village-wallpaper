@@ -21,5 +21,11 @@
         android:resource="@xml/wallpaper" />
     </service>
 
+      <activity android:name="xyz.hotrain.app.snowyvillagewallpaper.PreferenceActivity"
+          android:theme="@style/Theme.AppCompat.DayNight">
+        <intent-filter>
+          <action android:name="android.intent.action.MAIN" />
+        </intent-filter>
+      </activity>
   </application>
 </manifest>

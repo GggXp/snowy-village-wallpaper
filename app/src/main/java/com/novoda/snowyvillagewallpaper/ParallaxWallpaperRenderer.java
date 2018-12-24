@@ -1,7 +1,10 @@
 package com.novoda.snowyvillagewallpaper;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.novoda.snowyvillagewallpaper.santa.SantaSchedule;
@@ -21,11 +24,13 @@ import uk.co.halfninja.wallpaper.parallax.gl.Quad;
 import uk.co.halfninja.wallpaper.parallax.gl.Texture;
 import uk.co.halfninja.wallpaper.parallax.gl.TextureLoader;
 import uk.co.halfninja.wallpaper.parallax.gl.Utils;
+import xyz.hotrain.app.snowyvillagewallpaper.PreferenceActivity;
 
 import static com.novoda.snowyvillagewallpaper.ParallaxWallpaper.TAG;
 import static javax.microedition.khronos.opengles.GL10.*;
 
-public final class ParallaxWallpaperRenderer implements GLSurfaceView.Renderer {
+public final class ParallaxWallpaperRenderer
+        implements GLSurfaceView.Renderer, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final int MAX_SNOW_FLAKES_COUNT = 40;
 
@@ -61,6 +66,8 @@ public final class ParallaxWallpaperRenderer implements GLSurfaceView.Renderer {
     private int surfaceWidth;
     private int maxSnowflakeHeight;
 
+    private String backgroundType = PreferenceActivity.BACKGROUND_DEEP_BLUE;
+
     private final Capabilities capabilities = new Capabilities();
     private final Comparator<SnowFlake> snowFlakeComparator = new SnowFlakeSizeComparator();
     private final TextureLoader textureLoader;
@@ -76,8 +83,10 @@ public final class ParallaxWallpaperRenderer implements GLSurfaceView.Renderer {
 
     private GL10 gl;
 
-    public ParallaxWallpaperRenderer(AssetManager assets) {
-        this.textureLoader = new TextureLoader(capabilities, assets);
+    public ParallaxWallpaperRenderer(Context context) {
+        this.textureLoader = new TextureLoader(capabilities, context.getAssets());
+        backgroundType = PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(PreferenceActivity.PREF_BACKGROUND, PreferenceActivity.BACKGROUND_DEEP_BLUE);
     }
 
     @Override
@@ -141,7 +150,12 @@ public final class ParallaxWallpaperRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 gl) {
-        gl.glClearColor(SKY_COLOR_R, SKY_COLOR_G, SKY_COLOR_B, SKY_COLOR_A);
+        if (PreferenceActivity.BACKGROUND_DEEP_BLUE.equals(backgroundType)) {
+            gl.glClearColor(SKY_COLOR_R, SKY_COLOR_G, SKY_COLOR_B, SKY_COLOR_A);
+        } else {
+            gl.glClearColor(0f, 0f, 0f, 1f);
+        }
+
         gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         gl.glColor4f(1f, 1f, 1f, 1f);
 
@@ -288,4 +302,11 @@ public final class ParallaxWallpaperRenderer implements GLSurfaceView.Renderer {
         pixelOffset = xPixels;
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (PreferenceActivity.PREF_BACKGROUND.equals(key)) {
+            backgroundType = sharedPreferences
+                    .getString(PreferenceActivity.PREF_BACKGROUND, PreferenceActivity.BACKGROUND_DEEP_BLUE);
+        }
+    }
 }

@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import net.rbgrn.android.glwallpaperservice.GLWallpaperService;
 
+import androidx.preference.PreferenceManager;
+
 /**
  * Draws a wallpaper much like the regular wallpapers which slide behind
  * the home screen with a parallax effect. The difference with this wallpaper
@@ -39,7 +41,7 @@ public class ParallaxWallpaper extends GLWallpaperService {
 
         ParallaxEngine() {
             super();
-            renderer = new ParallaxWallpaperRenderer(ParallaxWallpaper.this.getAssets());
+            renderer = new ParallaxWallpaperRenderer(ParallaxWallpaper.this);
             setRenderer(renderer);
 
             // TODO: use RENDERMODE_WHEN_DIRTY if not showing snow
@@ -56,6 +58,20 @@ public class ParallaxWallpaper extends GLWallpaperService {
             } catch (IOException e) {
                 Log.e(TAG, "Error loading textures", e);
             }
+        }
+
+        @Override
+        public void onPause() {
+            super.onPause();
+            PreferenceManager.getDefaultSharedPreferences(ParallaxWallpaper.this)
+                    .registerOnSharedPreferenceChangeListener(renderer);
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            PreferenceManager.getDefaultSharedPreferences(ParallaxWallpaper.this)
+                    .unregisterOnSharedPreferenceChangeListener(renderer);
         }
 
         @Override

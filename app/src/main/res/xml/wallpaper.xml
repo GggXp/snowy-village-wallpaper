@@ -21,6 +21,7 @@
 <wallpaper xmlns:android="http://schemas.android.com/apk/res/android"
   android:author="@string/wallpaper_author"
   android:description="@string/wallpaper_description"
+  android:settingsActivity="xyz.hotrain.app.snowyvillagewallpaper.PreferenceActivity"
   android:thumbnail="@drawable/thumbnail" />
 
  
